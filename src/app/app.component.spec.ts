@@ -1,35 +1,74 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
+//TODO: "spec.ts <--"
+//TODO: 😨 es la sintaxis de Jasmin!
+
+describe(`(1) TEST del componente "AppComponent"`, () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientTestingModule, //TODO: <-----
       ],
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  //TODO:Aislado!
+  it('Debe de existir el AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(app).toBeTruthy(); //TODO: ✔
   });
 
-  it(`should have as title 'taller-formulario'`, () => {
+  //TODO:Aislado!
+  it('Debe retornar formulario invalido', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('taller-formulario');
+    fixture.detectChanges(); //TODO: <---------------
+
+    const email = app.form.controls['email'];
+    email.setValue('jcjcunior33@gmail.com');
+
+    expect(app.form.invalid).toBeTrue(); //TODO: ✔
   });
 
-  it('should render title', () => {
+  it('Debe retornar formulario valido', () => {
     const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('taller-formulario app is running!');
+
+    let email = app.form.controls['email'];
+    let password = app.form.controls['password'];
+    let result = app.form.controls['result'];
+
+    email.setValue('jcjcunior308@gmail.com');
+    password.setValue('123456Jj*');
+    result.setValue('1');
+
+    expect(app.form.invalid).toBeFalse(); //TODO: ✔
   });
+
+  //TODO:Aislado!
+  // it(`Debe de actulizar datos de usuario`, () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   const app = fixture.componentInstance;
+  //   fixture.detectChanges()
+
+  //   let email = app.form.controls['email']
+  //   let password = app.form.controls['password']
+
+  //   email.setValue('jcjcunior33@gmail.com')
+  //   password.setValue('123456')
+
+  //   const btnElement = fixture.debugElement.query(By.css('button.btn'))
+  //   btnElement.nativeElement.click()
+  //   const testData = { user: 1 }
+  //   expect(app.isCheck).toEqual(testData)
+  // });
 });
